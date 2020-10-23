@@ -35,10 +35,11 @@
                           <Component id="login" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jLabel1" alignment="0" min="-2" pref="159" max="-2" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                          <Component id="jLabel3" min="-2" pref="133" max="-2" attributes="0"/>
-                          <Component id="username" min="-2" pref="167" max="-2" attributes="0"/>
-                          <Component id="label1" alignment="1" min="-2" pref="92" max="-2" attributes="0"/>
+                      <Component id="jLabel3" alignment="1" min="-2" pref="133" max="-2" attributes="0"/>
+                      <Component id="username" alignment="1" min="-2" pref="167" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                          <Component id="label1" max="32767" attributes="0"/>
                       </Group>
                       <Component id="password" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -96,6 +97,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Signup"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="signupActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="login">
       <Properties>

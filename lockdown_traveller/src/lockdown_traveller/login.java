@@ -60,6 +60,11 @@ public class login extends javax.swing.JFrame {
         jLabel2.setText("Password");
 
         signup.setText("Signup");
+        signup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signupActionPerformed(evt);
+            }
+        });
 
         login.setText("Login");
         login.addActionListener(new java.awt.event.ActionListener() {
@@ -94,10 +99,12 @@ public class login extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(login))
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(password)))
                 .addContainerGap(94, Short.MAX_VALUE))
         );
@@ -131,7 +138,7 @@ public class login extends javax.swing.JFrame {
     private void usernameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameKeyReleased
 if(username.getText().length()==8){
     try {
-        Socket s=new Socket("localhost",9010);
+        Socket s=new Socket("localhost",5000);
         DataInputStream din=new DataInputStream(s.getInputStream());
         DataOutputStream dout=new DataOutputStream(s.getOutputStream());
         dout.writeUTF(username.getText());
@@ -166,13 +173,19 @@ else if(see==1){
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-if(pass.equalsIgnoreCase("-1")||pass.equalsIgnoreCase("")){
+
+        
+        if(pass.equalsIgnoreCase("-1")||pass.equalsIgnoreCase("")||username.getText().length()!=8){
     JOptionPane.showMessageDialog(null,"Please use correct username");
+    username.setText("");
+    label1.setText("");
     password.setText("");
 }
 else {
     if(pass.equalsIgnoreCase(password.getText())){
-        
+        Dashboard d=new Dashboard();
+        d.setVisible(true);
+        this.setVisible(false);
     }
     else {
         JOptionPane.showMessageDialog(null,"Incorrect Password");
@@ -182,6 +195,11 @@ else {
 
        
     }//GEN-LAST:event_loginActionPerformed
+
+    private void signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupActionPerformed
+    Signup sign=new Signup();
+    sign.setVisible(true);
+    }//GEN-LAST:event_signupActionPerformed
 
     /**
      * @param args the command line arguments
