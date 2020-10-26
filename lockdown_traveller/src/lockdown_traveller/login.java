@@ -213,7 +213,7 @@ else if(see==1){
         d.email=this.email;
         d.name=this.name;
         d.phone=this.phone;
-        d.usern=this.usern;
+        d.usern=username.getText();
         d.setVisible(true);
         this.setVisible(false);
         }

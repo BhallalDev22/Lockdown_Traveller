@@ -87,7 +87,7 @@ public class Changepassword extends javax.swing.JFrame {
         try {
             Socket soc=new Socket("localhost",9030);
             DataOutputStream dout=new DataOutputStream(soc.getOutputStream());
-            dout.writeUTF("update users set email='"+password.getText()+"' where username='"+username+"'");
+            dout.writeUTF("update users set ammount='"+password.getText()+"' where username='"+username+"'");
             JOptionPane.showMessageDialog(null,"Successfully updated password: "+password.getText());
             //m.name1=name.getText();
             System.out.println("done");

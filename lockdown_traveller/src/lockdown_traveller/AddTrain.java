@@ -26,7 +26,7 @@ public class AddTrain extends javax.swing.JFrame {
     String s2,route="";
     Date date;
     int sleeperc,acc,ccc;
-    String sll="",slm="",slu="",slsl="",slsu="",acl="",acu="",ccw="";
+    String sll="",slm="",slu="",slsl="",slsu="",acl="",acu="",ccw="",ccn="";
     int i;
     //Vector<String> v=new Vector<String>();
 Socket s;
@@ -277,6 +277,7 @@ Socket s;
             acl+="0$";
             acu+="0$";
             ccw+="0$";
+            ccn+="0$";
             
             //System.out.println(s2);
         }
@@ -304,7 +305,7 @@ Socket s;
     ccc1=cc.getItemAt(ccci);
     acc=ac1.getItemAt(acci);
     slc=sleeper.getItemAt(slci);
-    sql="insert into train (train_number,train_name,date,sleeper_coaches,sleeper_lower,sleeper_middle,sleeper_upper,sleeper_sidelower,sleeper_sideupper,ac_coaches,ac_lower,ac_upper,chaircar_coaches,chaircar_window,route) values ('"+trainnumber.getText()+"','"+trainname.getText()+"','"+df+"','"+slc+"','"+sll+"','"+slm+"','"+slu+"','"+slsl+"','"+slsu+"','"+acc+"','"+acl+"','"+acu+"','"+ccc1+"','"+ccw+"','"+route+"')";
+    sql="insert into train (train_number,train_name,date,sleeper_coaches,sleeper_lower,sleeper_middle,sleeper_upper,sleeper_sidelower,sleeper_sideupper,ac_coaches,ac_lower,ac_upper,chaircar_coaches,chaircar_window,route,chaircar_normal) values ('"+trainnumber.getText()+"','"+trainname.getText()+"','"+df+"','"+slc+"','"+sll+"','"+slm+"','"+slu+"','"+slsl+"','"+slsu+"','"+acc+"','"+acl+"','"+acu+"','"+ccc1+"','"+ccw+"','"+route+"','"+ccn+"')";
         try {
             Socket soc=new Socket("",9030);
             DataOutputStream dout=new DataOutputStream(soc.getOutputStream());
@@ -312,7 +313,7 @@ Socket s;
         } catch (IOException ex) {
             Logger.getLogger(AddTrain.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        JOptionPane.showMessageDialog(null,"Succefully Added Train !!!!");
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 

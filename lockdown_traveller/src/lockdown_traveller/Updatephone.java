@@ -86,7 +86,7 @@ static String user;
         try {
             Socket soc=new Socket("localhost",9030);
             DataOutputStream dout=new DataOutputStream(soc.getOutputStream());
-            dout.writeUTF("update users set email='"+phone.getText()+"' where username='"+username+"'");
+            dout.writeUTF("update users set phone='"+phone.getText()+"' where username='"+user+"'");
             JOptionPane.showMessageDialog(null,"Successfully updated phone as : "+phone.getText());
             //m.name1=name.getText();
             System.out.println("done");
