@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 public class login extends javax.swing.JFrame {
     int see=0;
     String pass="";
+    String name,usern,email,phone;
     /**
      * Creates new form login
      */
@@ -46,6 +47,7 @@ public class login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         label1 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,6 +86,13 @@ public class login extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText(">>Admin");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -99,14 +108,18 @@ public class login extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(login))
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addComponent(password)))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(password)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(username, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap(94, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,7 +142,8 @@ public class login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(signup)
                     .addComponent(login))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
 
         pack();
@@ -138,26 +152,39 @@ public class login extends javax.swing.JFrame {
     private void usernameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameKeyReleased
 if(username.getText().length()==8){
     try {
-        Socket s=new Socket("localhost",5000);
+        Socket s=new Socket("localhost",9000);
         DataInputStream din=new DataInputStream(s.getInputStream());
         DataOutputStream dout=new DataOutputStream(s.getOutputStream());
-        dout.writeUTF(username.getText());
-        pass=din.readUTF();
+        
+            
+            
+            dout.writeUTF(username.getText());
+            pass=din.readUTF();
+        
+        if(pass.equalsIgnoreCase("-1")){
+            username.setBackground(Color.RED);
+            label1.setText("User doesn't exist");
+            label1.setForeground(Color.red);
+        }
+        else {
+            username.setBackground(Color.GREEN);
+            label1.setText("");
+            name=din.readUTF();
+            System.out.println("name = "+name);
+            //phone=din.readUTF();
+            System.out.println("phone = "+phone);
+            //email=din.readUTF();
+            System.out.println("email = "+email);
+            usern=username.getText();
+            System.out.println("username = "+usern);
+        }
     } catch (IOException ex) {
         Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    if(pass.equalsIgnoreCase("-1")){
-        username.setBackground(Color.RED);
-        label1.setText("user doesn't exist");
-        label1.setForeground(Color.red);
-    }
-    else {
-        username.setBackground(Color.GREEN);
-        label1.setText("");
     }
 }
 else {
     username.setBackground(Color.WHITE);
+    label1.setText("");
 }
     }//GEN-LAST:event_usernameKeyReleased
 
@@ -173,25 +200,28 @@ else if(see==1){
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-
-        
-        if(pass.equalsIgnoreCase("-1")||pass.equalsIgnoreCase("")||username.getText().length()!=8){
+    
+    if(pass.equalsIgnoreCase("-1")||pass.equalsIgnoreCase("")||username.getText().length()!=8){
     JOptionPane.showMessageDialog(null,"Please use correct username");
     username.setText("");
     label1.setText("");
     password.setText("");
-}
-else {
-    if(pass.equalsIgnoreCase(password.getText())){
-        Dashboard d=new Dashboard();
-        d.setVisible(true);
-        this.setVisible(false);
     }
     else {
+        if(pass.equalsIgnoreCase(password.getText())){
+        Dashboard d=new Dashboard();
+        d.email=this.email;
+        d.name=this.name;
+        d.phone=this.phone;
+        d.usern=this.usern;
+        d.setVisible(true);
+        this.setVisible(false);
+        }
+        else {
         JOptionPane.showMessageDialog(null,"Incorrect Password");
         password.setText("");
+        }
     }
-}
 
        
     }//GEN-LAST:event_loginActionPerformed
@@ -200,6 +230,12 @@ else {
     Signup sign=new Signup();
     sign.setVisible(true);
     }//GEN-LAST:event_signupActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    this.setVisible(false);
+    Adminlogin ad=new Adminlogin();
+    ad.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,6 +273,7 @@ else {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
