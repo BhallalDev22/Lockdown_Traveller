@@ -22,6 +22,10 @@ import static lockdown_traveller.AddTrain.dist1;
  */
 public class Planjourney extends javax.swing.JFrame {
     Socket s;
+    static int dw[],dn[];
+    static int couches,q;
+    static int max1,max2,distance;
+    static String username,cls3,doj;
     DataOutputStream dout;
     DataInputStream din;
     int i;
@@ -44,6 +48,9 @@ public class Planjourney extends javax.swing.JFrame {
             s1=din.readUTF();
         }
     }
+    public void setter(String a){
+        this.username=a;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,9 +72,11 @@ public class Planjourney extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         date1 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        fetch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        dist = new javax.swing.JLabel();
+        fare = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +88,7 @@ public class Planjourney extends javax.swing.JFrame {
 
         jLabel3.setText("Class");
 
-        clas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "Sleeper", "Chair Car" }));
+        clas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sleeper", "Chair Car" }));
         clas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clasActionPerformed(evt);
@@ -95,10 +104,10 @@ public class Planjourney extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Check");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        fetch.setText("Fetch");
+        fetch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                fetchActionPerformed(evt);
             }
         });
 
@@ -125,42 +134,60 @@ public class Planjourney extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(clas, javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(source, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jLabel3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 318, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addGap(0, 226, Short.MAX_VALUE))
+                        .addGap(56, 56, 56)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(clas, javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(source, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel3))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(232, 232, 232)
+                        .addComponent(dist, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 8, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(destination, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(141, 141, 141))))
-            .addComponent(jScrollPane1)
+                            .addComponent(fetch, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(141, 141, 141))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fare, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(67, 67, 67)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dist, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fare, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
@@ -180,7 +207,7 @@ public class Planjourney extends javax.swing.JFrame {
                 .addGap(45, 45, 45)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(fetch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(209, 209, 209))
@@ -204,19 +231,27 @@ public class Planjourney extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    String date,s1,s2,s3,route;
+    private void fetchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fetchActionPerformed
+    table.removeAll();
+    int totalseats=0,avail=0;
+    DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+dtm.setRowCount(0);
+        String date,s1,s2,s3,route,so1,sd1;
     System.out.println("don3");
     i=source.getSelectedIndex();
     s1=source.getItemAt(i);
+    so1=s1;
     i=destination.getSelectedIndex();
     s2=destination.getItemAt(i);
+    sd1=s2;
     DateFormat df1;
         df1 = new SimpleDateFormat("dd-MM-yyyy");
         date=df1.format(date1.getDate());
+        doj=date;
     i=clas.getSelectedIndex();
     s3=clas.getItemAt(i);
     if(s3.equalsIgnoreCase("Chair Car")){
+        cls3="Chair Car";
         System.out.println("don3");
         try {
             Socket soc1=new Socket("localhost",9060);
@@ -227,28 +262,159 @@ public class Planjourney extends javax.swing.JFrame {
             while(!(s1=din1.readUTF()).equalsIgnoreCase("-1")){
                 s2=din1.readUTF();
                 System.out.println("don3");
-                int couches;
+                
                 s3=din1.readUTF();
                 couches=Integer.parseInt(s3);
+                totalseats=couches*72;
+                int ws=36*couches,ns=0;
+                ns=ws;
                 String wind=din1.readUTF();
                 route=din1.readUTF();
+                String ccn;
+                ccn=din1.readUTF();
+                int i,j=0,p,si=0,sd=0;
+                for(i=0;i<route.length();i++){
+                    if(route.charAt(i)=='$'){
+                        j++;
+                    }
+                }
+                q=j;
+                String s4[]=new String[j];
+                int d4[]=new int[j];
+                dw=new int[j];
+                dn=new int[j];
+                String s5="",d3="",s6="";
+                p=0;
+                for(i=0;i<route.length();i++){
+                    if(route.charAt(i)=='$'){
+                        s6="";
+                        d3="";
+                        j=0;
+                        while(s5.charAt(j)!='%'){
+                            s6+=s5.charAt(j);
+                            j++;
+                        }
+                        j++;
+                        while(j<s5.length()){
+                            d3+=s5.charAt(j);
+                            j++;
+                        }
+                        System.out.println(s6+"\t");
+                        s4[p]=s6;
+                        d4[p]=Integer.parseInt(d3);
+                        if(s4[p].equalsIgnoreCase(so1)){
+                            si=p;
+                        }
+                        if(s4[p].equalsIgnoreCase(sd1)){
+                            sd=p;
+                        }
+                        System.out.println(d4[p]);
+                        p++;
+                        //System.out.println(s5);
+                        s5="";
+                    }
+                    else {
+                        s5+=route.charAt(i);      
+                    }
+                }
+                s5="";
+                p=0;
+                for(i=0;i<wind.length();i++){
+                    if(wind.charAt(i)=='$'){
+                     dw[p]=Integer.parseInt(s5);
+                     s5="";
+                     p++;
+                    }
+                    else {
+                        s5+=wind.charAt(i);
+                    }
+                }
+                s5="";
+                p=0;
+                for(i=0;i<ccn.length();i++){
+                    if(ccn.charAt(i)=='$'){
+                     dn[p]=Integer.parseInt(s5);
+                     s5="";
+                     p++;
+                    }
+                    else {
+                        s5+=ccn.charAt(i);
+                    }
+                }
+                max1=dw[si];
+                max2=dn[si];
+                for(i=si;i<=sd;i++){
+                    if(dw[i]>max1){
+                        max1=dw[i];
+                    }
+                    if(dn[i]>max2){
+                        max2=dn[i];
+                    }
+                }
+                avail=totalseats-(max1+max2);
+                s3=""+avail;
+                distance=d4[sd]-d4[si];
+                dist.setText("Distance : "+(d4[sd]-d4[si]+" Km\n"));
+                fare.setText("Fare : Rs. "+(((d4[sd]-d4[si])*1.5)+15));
+                System.out.println(si);
+                System.out.println(sd);
+                System.out.println(s1);
                 Object[] row = { s1,s2,s3};
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.addRow(row);
-                String ccn;
-                ccn=din1.readUTF();
-                
+                max1=ws-max1;
+                max2=ns-max2;
+                //System.out.println(ccn.charAt(0));
             }
-            System.out.println("don3");
+            System.out.println(max1);
         } catch (IOException ex) {
             Logger.getLogger(Planjourney.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    else {
+        cls3="Sleeper";
+        Socket soc2;
+        try {
+            soc2 = new Socket("localhost",9060);
+            DataOutputStream dout1=new DataOutputStream(soc2.getOutputStream());
+            DataInputStream din1=new DataInputStream(soc2.getInputStream());
+            dout1.writeUTF("select * from train where route like '%"+s1+"%"+s2+"%' AND date='"+date+"'");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Planjourney.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }
+    }//GEN-LAST:event_fetchActionPerformed
 
     private void clasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_clasActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+    int row = table.rowAtPoint(evt.getPoint());
+    i=clas.getSelectedIndex();
+    String s3=clas.getItemAt(i);
+    if(s3.equalsIgnoreCase("Chair Car")){
+        RequestBooking rq=new RequestBooking();
+        
+        //rq.tnum=table.getComponentAt(row, 1).toString();
+        rq.tnum=table.getModel().getValueAt(row, 0).toString();
+        rq.tnm=table.getModel().getValueAt(row, 1).toString();
+        rq.date=doj;
+        i=source.getSelectedIndex();
+        rq.sour=source.getItemAt(i);
+        i=destination.getSelectedIndex();
+        rq.dest=destination.getItemAt(i);
+        try {
+            rq.setter(username);
+        } catch (IOException ex) {
+            Logger.getLogger(Planjourney.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        rq.setVisible(true);
+    }
+    
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -293,8 +459,10 @@ public class Planjourney extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> clas;
     private com.toedter.calendar.JDateChooser date1;
     private javax.swing.JComboBox<String> destination;
+    private javax.swing.JLabel dist;
+    private javax.swing.JLabel fare;
+    private javax.swing.JButton fetch;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

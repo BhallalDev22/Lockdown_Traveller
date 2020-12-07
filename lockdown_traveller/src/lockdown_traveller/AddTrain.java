@@ -268,7 +268,7 @@ Socket s;
             Object[] row = { s2,dist1};
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.addRow(row);
-            route+=s2+"%"+dist.getText()+"$";
+            route+=s2+"%"+dist1+"$";
             sll+="0$";
             slm+="0$";
             slu+="0$";
@@ -286,16 +286,33 @@ Socket s;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    String sql;
+        String df="",d="";
+        DateFormat df1;
+        df1 = new SimpleDateFormat("dd-MM-yyyy");
+        df=df1.format(date1.getDate());
+        try {System.out.println("addtrain");
+            Socket soc3=new Socket("localhost",9070);
+            DataOutputStream dout2=new DataOutputStream(soc3.getOutputStream());
+            DataInputStream din2=new DataInputStream(soc3.getInputStream());
+            System.out.println("addtrain");
+            dout2.writeUTF("select * from train where train_number='"+trainnumber.getText()+"' AND date='"+df+"'");
+            d=din2.readUTF();
+        } catch (IOException ex) {
+            Logger.getLogger(AddTrain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(d.equalsIgnoreCase("1")){
+            JOptionPane.showMessageDialog(rootPane, "Same train found on same day!!!!!");
+        }
+        else{
+        String sql;
     date=date1.getDate();
-    String df="",d="";
+    
     d=date.toString();
     int j,i;
     i=0;
     j=0;
-    DateFormat df1;
-        df1 = new SimpleDateFormat("dd-MM-yyyy");
-        df=df1.format(date1.getDate());
+    
+    
     int slci,acci,ccci;
     slci=sleeper.getSelectedIndex();
     acci=ac1.getSelectedIndex();
@@ -314,7 +331,7 @@ Socket s;
             Logger.getLogger(AddTrain.class.getName()).log(Level.SEVERE, null, ex);
         }
         JOptionPane.showMessageDialog(null,"Succefully Added Train !!!!");
-        this.setVisible(false);
+        this.setVisible(false);}
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
